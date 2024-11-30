@@ -1,0 +1,12 @@
+Flask
+pillow
+numpy
+pyocr
+pytesseract
+cnocr
+opencv-python
+pycorrector
+flask_cors
+onnxruntime
+kenlm
+deepl
