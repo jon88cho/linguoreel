@@ -48,6 +48,8 @@ You can also check the [official pytesseract page](https://pypi.org/project/pyte
 Navigate to the project directory and create a virtual environment using Python 3.10:
 
 ```bash
+# Change directory into Python directory
+cd ocr_app
 # Create a virtual environment
 python3.10 -m venv ocr_env
 
