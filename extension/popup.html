@@ -3,9 +3,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Popup</title>
     <style>
-        /* Add any styles here */
+        /* Ensure the body occupies the full popup */
+        html, body {
+            width: 400px; /* Default popup width */
+            height: 300px; /* Default popup height */
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f4f4f9;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        label {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        select, button {
+            width: 80%; /* Make content scale with window */
+            max-width: 300px;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -13,10 +56,10 @@
     <select id="language-select">
         <option value="ZH">Chinese (ZH)</option>
         <option value="DE">German (DE)</option>
+        <!-- Add more languages -->
     </select>
 
     <button id="start-selection">Start OCR Selection</button>
-
     <script src="popup.js"></script>
 </body>
 </html>

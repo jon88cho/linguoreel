@@ -1,4 +1,62 @@
 (() => {
+    function styleButton(button, bgColor = "#007BFF", hoverColor = "#0056b3") {
+        button.style.padding = "10px 20px";
+        button.style.backgroundColor = bgColor;
+        button.style.color = "#ffffff";
+        button.style.border = "none";
+        button.style.borderRadius = "5px";
+        button.style.fontSize = "16px";
+        button.style.fontWeight = "bold";
+        button.style.cursor = "pointer";
+        button.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.2)";
+        button.style.transition = "background-color 0.3s ease, transform 0.2s ease";
+    
+        button.addEventListener("mouseover", () => {
+            button.style.backgroundColor = hoverColor;
+            button.style.transform = "scale(1.05)";
+        });
+        button.addEventListener("mouseout", () => {
+            button.style.backgroundColor = bgColor;
+            button.style.transform = "scale(1)";
+        });
+        button.addEventListener("mousedown", () => {
+            button.style.transform = "scale(0.95)";
+        });
+        button.addEventListener("mouseup", () => {
+            button.style.transform = "scale(1)";
+        });
+    }
+    function styleHeader (header) {
+        header.style.position = "absolute";
+        header.style.top = "0";
+        header.style.left = "0";
+        header.style.width = "100%";
+        header.style.height = "40px"; // Increased height for better usability
+        header.style.backgroundColor = "#f4f4f9"; // Light gray for contrast
+        header.style.borderBottom = "1px solid #ddd"; // Subtle separator line
+        header.style.cursor = "move";
+        header.style.padding = "10px"; // Proper padding for the header text
+        header.style.boxSizing = "border-box";
+        header.style.fontWeight = "bold"; // Bold text for clarity
+        header.style.color = "#555"; // Neutral text color
+        header.style.display = "flex";
+        header.style.alignItems = "center"; // Center-align text vertically
+        header.style.zIndex = "10100"; // Ensure the header is above the content
+    }
+    function stylePopup (popup) {
+        popup.style.width = "300px"; // Slightly wider for better usability
+        popup.style.height = "350px"; // Adjusted height for content space
+        popup.style.padding = "15px"; // Increased padding for cleaner layout
+        popup.style.border = "1px solid #ccc"; // Softer border color for a modern look
+        popup.style.borderRadius = "8px"; // Rounded corners
+        popup.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)"; // Subtle shadow for depth
+        popup.style.backgroundColor = "#ffffff"; // Clean white background
+        popup.style.zIndex = "10000";
+        popup.style.fontSize = "16px";
+        popup.style.color = "#333";
+        popup.style.resize = "both"; // Allow resizing
+        popup.style.overflow = "auto"; // Allow scrolling if content overflows
+    }
     let startX, startY, overlay, OCRresponse = '';
     let intervalId;
     let lastOCRText = ''; // To track the last OCR capture
@@ -67,28 +125,11 @@
         popup.style.position = "fixed";
         popup.style.left = `${rect.left}px`;
         popup.style.top = `${rect.bottom + 10}px`;
-        popup.style.width = "250px";
-        popup.style.height = "300px";
-        popup.style.padding = "10px";
-        popup.style.border = "1px solid #333";
-        popup.style.backgroundColor = "#f9f9f9";
-        popup.style.zIndex = "10000";
-        popup.style.fontSize = "16px";
-        popup.style.color = "#333";
-        popup.style.resize = "both";  // Allow resizing
-        popup.style.overflow = "auto"; // Allow scroll if content overflows
+        stylePopup(popup)
 
-        // Creating header for dragging the popup
+        // Creating a header for dragging the popup
         const header = document.createElement("div");
-        header.style.position = "absolute";
-        header.style.top = "0";
-        header.style.left = "0";
-        header.style.width = "100%";
-        header.style.height = "30px";
-        header.style.backgroundColor = "#f1f1f1";
-        header.style.cursor = "move";
-        header.style.padding = "5px";
-        header.style.zIndex = "10100"; // Ensure the header is above content
+        styleHeader(header)
         // Adding dragging functionality to the OCR popup
         let isDragging = false;
         header.addEventListener("mousedown", (e) => {
@@ -133,6 +174,8 @@
         textContainer.id = "ocr-text";
         textContainer.style.whiteSpace = "pre-wrap";
         textContainer.style.userSelect = "text";
+        textContainer.style.height = "calc(100% - 80px)"
+        textContainer.style.overflowY = "auto"; // Make text container scrollable
         textContainer.style.paddingTop = "40px"; // Adjust for header height
         textContainer.innerHTML = "OCR Output:<br>Waiting for OCR...";
 
@@ -140,9 +183,15 @@
 
         // Adding save/lookup/translate buttons
         const buttonContainer = document.createElement("div");
+        buttonContainer.style.position = "absolute"; // Fix position within the popup
+        buttonContainer.style.bottom = "10px"; // Distance from the bottom of the popup
+        buttonContainer.style.left = "10px"; // Distance from the left (adjust if needed)
+        buttonContainer.style.right = "10px"; // Distance from the right (adjust if needed)
         buttonContainer.style.display = "flex";
-        buttonContainer.style.justifyContent = "space-between";
-        buttonContainer.style.marginTop = "10px";
+        buttonContainer.style.justifyContent = "space-between"; // Space buttons out evenly
+        buttonContainer.style.marginTop = "10px"; // Optional, can remove if unnecessary
+        buttonContainer.style.padding = "5px"; // Optional, to give some space around buttons
+
                 // Save button
                 const saveButton = document.createElement("button");
                 saveButton.textContent = "Save";
@@ -168,6 +217,11 @@
                 // Translate button
                 const translateButton = document.createElement("button");
                 translateButton.textContent = "Translate";
+                const buttons = [saveButton, lookupButton, translateButton];
+                // Apply styles to all buttons
+                buttons.forEach(button => {
+                    styleButton(button);
+                });
                 translateButton.onclick = () => {
                     if (!selectedText) {
                         alert("Please highlight text to translate.");
@@ -185,27 +239,11 @@
                             translationPopup.style.position = "fixed";
                             translationPopup.style.left = "10px";
                             translationPopup.style.top = "10px";
-                            translationPopup.style.width = "300px";
-                            translationPopup.style.height = "auto";
-                            translationPopup.style.padding = "10px";
-                            translationPopup.style.border = "1px solid #333";
-                            translationPopup.style.backgroundColor = "#f9f9f9";
                             translationPopup.style.zIndex = "10000";
-                            translationPopup.style.fontSize = "16px";
-                            translationPopup.style.color = "#333";
-                            translationPopup.style.resize = "both";
-                            translationPopup.style.overflow = "auto";
+                            stylePopup(translationPopup)
                         
                             const header = document.createElement("div");
-                            header.style.position = "absolute";
-                            header.style.top = "0";
-                            header.style.left = "0";
-                            header.style.width = "100%";
-                            header.style.height = "30px";
-                            header.style.backgroundColor = "#f1f1f1";
-                            header.style.cursor = "move";
-                            header.style.padding = "5px";
-                            header.textContent = "Translations";
+                            styleHeader(header)
                         
                             const closeTranslationPopup = document.createElement("span");
                             closeTranslationPopup.textContent = "×";
@@ -281,10 +319,12 @@
                         const newText = response.text.text;
                         if (newText && newText !== lastOCRText) {
                             lastOCRText = newText;
-                            OCRresponse += `${newText} `;
+                            OCRresponse += `${newText}<br>`;
                             textContainer.innerHTML = `<b>Transcript:</b><br>${OCRresponse}`;
                         }
                     }
+                    // Scroll to the bottom after updating the content
+                    textContainer.scrollTop = textContainer.scrollHeight;
                 }
             );
         }, 1000);

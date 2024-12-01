@@ -13,6 +13,7 @@ def set_selection():
             return jsonify({"error": "No JSON data provided"}), 400
 
         x, y, width, height, language = data['x'], data['y'], data['width'], data['height'], data['language']
+        print("this is language: ", data['language'])
         text_data = capture_and_read_text(x, y, width, height, language)
         # Check that all fields are present
         if None in [x, y, width, height]:
