@@ -1,10 +1,20 @@
-
 # OCR Language Extension
 
 This project is a Chrome extension integrated with an OCR (Optical Character Recognition) system that allows users to select a language (Chinese or German) and extract text from screen captures. It supports text translation using the DeepL API and performs text processing based on the language choice.
 
 ## Installation
 
+### 0. Install Homebrew and git
+Make sure you have Homebrew installed on your system. Open a Terminal and paste this command:
+#### For macOS:
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew install git
+```
+#### Git Pull Repo:
+```bash
+git pull https://github.com/jon88cho/linguoreel.git
+```
 ### 1. Install Python 3.10
 Make sure you have Python 3.10 installed on your system. You can download it from the [official Python website](https://www.python.org/downloads/release/python-3100/) or install it using a package manager:
 
@@ -34,14 +44,28 @@ sudo apt-get install tesseract-ocr
 
 You can also check the [official pytesseract page](https://pypi.org/project/pytesseract/) for more installation details.
 
-### 3. Install Required Python Packages
-Navigate to the project directory and install the necessary Python packages using `pip`. You can do this by running the following command:
+### 3. Create a Virtual Environment and Install Dependencies
+Navigate to the project directory and create a virtual environment using Python 3.10:
 
 ```bash
-pip install -r requirements.txt
+# Create a virtual environment
+python3.10 -m venv ocr_env
+
+# Activate the virtual environment
+# On macOS/Linux:
+source ocr_env/bin/activate
+
+# On Windows:
+ocr_env\Scripts\activate
+
+# Install the required packages while the virtual environment is active
+python3.10 -m pip install -r requirements.txt
 ```
 
-This will install all dependencies listed in `requirements.txt`.
+**Notes:**
+- Creating a virtual environment isolates the project dependencies
+- Activate the virtual environment each time you work on the project
+- Use `deactivate` command to exit the virtual environment when done
 
 ### 4. Set the DeepL API Environment Variable
 This project integrates with the DeepL API for text translation. You'll need to set an environment variable to provide your DeepL API key.
@@ -74,10 +98,10 @@ You should now see the extension icon in your browser's toolbar.
 For more detailed instructions, refer to the [Chrome Extensions documentation](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world).
 
 ### 2. Run the Server
-Once the extension is loaded, you can run the server to handle OCR requests. Make sure you're in the project directory, then run the following command to start the server:
+Once the extension is loaded, you can run the server to handle OCR requests. Make sure you're in the project directory and the virtual environment is activated, then run the following command to start the server:
 
 ```bash
-python server.py
+python3.10 -m app.py
 ```
 
 This will start the backend server that handles OCR text extraction and translation.
@@ -85,10 +109,8 @@ This will start the backend server that handles OCR text extraction and translat
 ## Additional Notes
 
 - The extension uses the Tesseract OCR engine to process images and extract text.
-- It supports two languages: Chinese (ZH) and German (DE). The user can select the language from a dropdown in the popup.
+- It currently supports two languages: Chinese (ZH) and German (DE). The user can select the language from a dropdown in the popup.
 - The DeepL API is used for translating the extracted text, and the `selectedLanguage` variable is used to set the target language.
-
-Feel free to contribute to the project or ask for further assistance if needed.
 
 ---
 
