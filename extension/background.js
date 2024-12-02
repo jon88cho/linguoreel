@@ -63,8 +63,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             })
             .then(data => {
                 if (data && data.translatedText) {
-                    sendResponse({ translatedText: data.translatedText });
-                    console.log("Translated text:", data.translatedText);
+                    sendResponse({ translatedText: data.translatedText, pinyinResult: data.pinyinResult });
+                    console.log("Translated data: ", data);
                 } else {
                     console.log("No translation provided:", data);
                     sendResponse({ translatedText: "" });

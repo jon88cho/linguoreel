@@ -38,14 +38,13 @@ def get_translation():
         language = data.get('language', 'EN')  # Default to English if no language specified
 
         # Perform the translation
-        translated_text = translate_text(text, source_language=language)
-
-        if not hasattr(translated_text, 'text'):
-            return jsonify({"error": "Translation service did not return valid text"}), 500
-
+        result = translate_text(text, source_language=language)
+        
+        print("this is app.py result :", result)
         response = {
             "originalText": text,
-            "translatedText": translated_text.text,
+            "translatedText": result["translated_text"].text,
+            "pinyinResult": result["pinyinResult"]
         }
         return jsonify(response), 200
 

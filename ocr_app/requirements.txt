@@ -10,3 +10,4 @@ flask_cors
 onnxruntime
 kenlm
 deepl
+pinyin

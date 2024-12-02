@@ -123,8 +123,8 @@
         document.body.style.cursor = "default";
         const popup = document.createElement("div");
         popup.style.position = "fixed";
-        popup.style.left = `${rect.left}px`;
-        popup.style.top = `${rect.bottom + 10}px`;
+        popup.style.left = "10px";
+        popup.style.top = "10px";
         stylePopup(popup)
 
         // Creating a header for dragging the popup
@@ -289,7 +289,12 @@
                         
 
                         const translationText = document.createElement("p");
-                        translationText.innerHTML = `<b>${selectedText}</b>: ${response.translatedText}`;
+                        if (selectedLanguage=="ZH") {
+                            translationText.innerHTML = `<b>${selectedText}</b>: ${response.translatedText} (${response.pinyinResult})`;
+                        }
+                        if (selectedLanguage=="DE") {
+                            translationText.innerHTML = `<b>${selectedText}</b>: ${response.translatedText}`;
+                        }
                         translationPopup.appendChild(translationText);
                     }
                 }

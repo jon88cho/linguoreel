@@ -10,6 +10,7 @@ from difflib import SequenceMatcher
 import deepl
 import os
 import pytesseract
+import pinyin
 
 # Instantiate necessary objects
 translator = deepl.Translator(os.environ['deeplkey']) # https://www.deepl.com/en/your-account/keys
@@ -42,8 +43,10 @@ def process_image_with_inrange_and_blur(image):
 
 def translate_text(text, source_language='ZH', target_language='EN-US'):
     result = translator.translate_text(text, source_lang=source_language, target_lang=target_language)
+    pinyinResult = pinyin.get(text)
     print("this is result:", result)
-    return(result)
+    print("this is pinyin:", pinyinResult)
+    return({"translated_text":result, "pinyinResult":pinyinResult})
 
 # Language Specific Functions
 ## Chinese Specific Functions
