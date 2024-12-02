@@ -9,11 +9,15 @@ Make sure you have Homebrew installed on your system. Open a Terminal and paste 
 #### For macOS:
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+```bash
 brew install git
 ```
+
 #### Git Pull Repo:
 ```bash
-git pull https://github.com/jon88cho/linguoreel.git
+git clone https://github.com/jon88cho/linguoreel.git
 ```
 ### 1. Install Python 3.10
 Make sure you have Python 3.10 installed on your system. You can download it from the [official Python website](https://www.python.org/downloads/release/python-3100/) or install it using a package manager:
@@ -35,6 +39,9 @@ You need to install the Tesseract OCR tool to process images for text extraction
 #### For macOS:
 ```bash
 brew install tesseract
+brew install tesseract-lang
+brew install cmake boost eigen
+xcode-select --install
 ```
 
 #### For Ubuntu:
@@ -62,6 +69,11 @@ ocr_env\Scripts\activate
 
 # Install the required packages while the virtual environment is active
 python3.10 -m pip install -r requirements.txt
+```
+
+#### For Apple Silicon:
+```bash
+CMAKE_OSX_ARCHITECTURES=arm64 python3.10 -m install https://github.com/kpu/kenlm/archive/master.zip
 ```
 
 **Notes:**
@@ -103,7 +115,7 @@ For more detailed instructions, refer to the [Chrome Extensions documentation](h
 Once the extension is loaded, you can run the server to handle OCR requests. Make sure you're in the project directory and the virtual environment is activated, then run the following command to start the server:
 
 ```bash
-python3.10 -m app.py
+python3.10 app.py
 ```
 
 This will start the backend server that handles OCR text extraction and translation.
