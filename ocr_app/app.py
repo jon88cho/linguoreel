@@ -53,5 +53,10 @@ def get_translation():
         return jsonify({"error": str(e)}), 500
 
     
-if __name__ == '__main__':
+# Define the run_app function here
+def run_app():
     app.run(debug=True, host="0.0.0.0", port=5001)
+
+# If this file is executed directly, run the Flask app
+if __name__ == '__main__':
+    run_app()

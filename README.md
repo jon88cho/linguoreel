@@ -87,7 +87,7 @@ This project integrates with the DeepL API for text translation. You'll need to 
 #### On macOS/Linux:
 You can set the environment variable in your terminal session using:
 ```bash
-export DEEPL_API_KEY="your_deepL_api_key"
+export deeplkey="your_deepL_api_key"
 ```
 
 #### On Windows:
