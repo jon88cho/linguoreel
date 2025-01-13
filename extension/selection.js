@@ -197,8 +197,8 @@
                 saveButton.textContent = "Save";
                 saveButton.onclick = () => {
                     chrome.runtime.sendMessage(
-                        { message: "save", text: OCRresponse },
-                        (response) => console.log(response?.status || "Save not acknowledged")
+                        {message: "save", word: selectedText },
+                        (response) => console.log(response)
                     );
                 };
         
@@ -222,83 +222,83 @@
                 buttons.forEach(button => {
                     styleButton(button);
                 });
+
                 translateButton.onclick = () => {
                     if (!selectedText) {
                         alert("Please highlight text to translate.");
                         return;
                     }
-
-            chrome.runtime.sendMessage(
-                { message: "translate", text: selectedText, language: selectedLanguage},
-                (response) => {
-                    if (response && response.translatedText) {
-                        let translationPopup = document.getElementById("translation-popup");
-                        if (!translationPopup) {
-                            translationPopup = document.createElement("div");
-                            translationPopup.id = "translation-popup";
-                            translationPopup.style.position = "fixed";
-                            translationPopup.style.left = "10px";
-                            translationPopup.style.top = "10px";
-                            translationPopup.style.zIndex = "10000";
-                            stylePopup(translationPopup)
-                        
-                            const header = document.createElement("div");
-                            styleHeader(header)
-                        
-                            const closeTranslationPopup = document.createElement("span");
-                            closeTranslationPopup.textContent = "×";
-                            closeTranslationPopup.style.position = "absolute";
-                            closeTranslationPopup.style.top = "5px";
-                            closeTranslationPopup.style.right = "10px";
-                            closeTranslationPopup.style.fontSize = "20px";
-                            closeTranslationPopup.style.cursor = "pointer";
-                            closeTranslationPopup.style.color = "#333";
-                            closeTranslationPopup.style.fontWeight = "bold";
-                            closeTranslationPopup.onclick = () => translationPopup.remove();
-                        
-                            header.appendChild(closeTranslationPopup);
-                            translationPopup.appendChild(header);
-                        
-                            // Adjust the paddingTop of the content area to avoid it being hidden under the header
-                            const contentArea = document.createElement("div");
-                            contentArea.style.paddingTop = "35px"; // Offset for the header height
-                            contentArea.innerHTML = `Translations:`;
-                            translationPopup.appendChild(contentArea);
-                        
-                            document.body.appendChild(translationPopup);
-                        
-                            let isDragging = false, offsetX = 0, offsetY = 0;
-                            header.addEventListener("mousedown", (e) => {
-                                isDragging = true;
-                                offsetX = e.clientX - translationPopup.getBoundingClientRect().left;
-                                offsetY = e.clientY - translationPopup.getBoundingClientRect().top;
-                                e.preventDefault();
-                            });
-                        
-                            document.addEventListener("mousemove", (e) => {
-                                if (isDragging) {
-                                    translationPopup.style.left = `${e.clientX - offsetX}px`;
-                                    translationPopup.style.top = `${e.clientY - offsetY}px`;
+                    chrome.runtime.sendMessage(
+                        {message: "translate", text: selectedText, language: selectedLanguage},
+                        (response) => {
+                            if (response && response.translatedText) {
+                                let translationPopup = document.getElementById("translation-popup");
+                                if (!translationPopup) {
+                                    translationPopup = document.createElement("div");
+                                    translationPopup.id = "translation-popup";
+                                    translationPopup.style.position = "fixed";
+                                    translationPopup.style.left = "10px";
+                                    translationPopup.style.top = "10px";
+                                    translationPopup.style.zIndex = "10000";
+                                    stylePopup(translationPopup)
+                                
+                                    const header = document.createElement("div");
+                                    styleHeader(header)
+                                
+                                    const closeTranslationPopup = document.createElement("span");
+                                    closeTranslationPopup.textContent = "×";
+                                    closeTranslationPopup.style.position = "absolute";
+                                    closeTranslationPopup.style.top = "5px";
+                                    closeTranslationPopup.style.right = "10px";
+                                    closeTranslationPopup.style.fontSize = "20px";
+                                    closeTranslationPopup.style.cursor = "pointer";
+                                    closeTranslationPopup.style.color = "#333";
+                                    closeTranslationPopup.style.fontWeight = "bold";
+                                    closeTranslationPopup.onclick = () => translationPopup.remove();
+                                
+                                    header.appendChild(closeTranslationPopup);
+                                    translationPopup.appendChild(header);
+                                
+                                    // Adjust the paddingTop of the content area to avoid it being hidden under the header
+                                    const contentArea = document.createElement("div");
+                                    contentArea.style.paddingTop = "35px"; // Offset for the header height
+                                    contentArea.innerHTML = `Translations:`;
+                                    translationPopup.appendChild(contentArea);
+                                
+                                    document.body.appendChild(translationPopup);
+                                
+                                    let isDragging = false, offsetX = 0, offsetY = 0;
+                                    header.addEventListener("mousedown", (e) => {
+                                        isDragging = true;
+                                        offsetX = e.clientX - translationPopup.getBoundingClientRect().left;
+                                        offsetY = e.clientY - translationPopup.getBoundingClientRect().top;
+                                        e.preventDefault();
+                                    });
+                                
+                                    document.addEventListener("mousemove", (e) => {
+                                        if (isDragging) {
+                                            translationPopup.style.left = `${e.clientX - offsetX}px`;
+                                            translationPopup.style.top = `${e.clientY - offsetY}px`;
+                                        }
+                                    });
+                                
+                                    document.addEventListener("mouseup", () => {
+                                        isDragging = false;
+                                    });
                                 }
-                            });
-                        
-                            document.addEventListener("mouseup", () => {
-                                isDragging = false;
-                            });
-                        }
-                        
+                                
 
-                        const translationText = document.createElement("p");
-                        if (selectedLanguage=="ZH") {
-                            translationText.innerHTML = `<b>${selectedText}</b>: ${response.translatedText} (${response.pinyinResult})`;
+                                const translationText = document.createElement("p");
+                                if (selectedLanguage=="ZH") {
+                                    translationText.innerHTML = `<b>${selectedText}</b>: ${response.translatedText} (${response.pinyinResult})`;
+                                }
+                                if (selectedLanguage=="DE") {
+                                    translationText.innerHTML = `<b>${selectedText}</b>: ${response.translatedText}`;
+                                }
+                                translationPopup.appendChild(translationText);
+                            }
                         }
-                        if (selectedLanguage=="DE") {
-                            translationText.innerHTML = `<b>${selectedText}</b>: ${response.translatedText}`;
-                        }
-                        translationPopup.appendChild(translationText);
-                    }
-                }
-            );
+                    );
         };
 
         buttonContainer.appendChild(saveButton);

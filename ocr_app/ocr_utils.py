@@ -13,7 +13,7 @@ import pytesseract
 import pinyin
 
 # Instantiate necessary objects
-translator = deepl.Translator(os.environ['deeplkey']) # https://www.deepl.com/en/your-account/keys
+translator = deepl.Translator(os.environ['DEEPLKEY']) # https://www.deepl.com/en/your-account/keys
 m = Corrector()
 ocr = CnOcr()
 

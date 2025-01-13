@@ -11,3 +11,4 @@ onnxruntime
 kenlm
 deepl
 pinyin
+boto3

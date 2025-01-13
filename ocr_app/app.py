@@ -1,9 +1,18 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from ocr_utils import capture_and_read_text, translate_text
+import boto3
+from botocore.exceptions import BotoCoreError, NoCredentialsError
+import uuid
+from datetime import datetime
+
+# DynamoDB Instantiation
+dynamodb = boto3.resource('dynamodb', region_name='ap-northeast-2')
 
 app = Flask(__name__)
 CORS(app, resources={r"/set-selection": {"origins": "*"}})
+now = datetime.utcnow()
+iso_string = now.replace(microsecond=0).isoformat() + "Z"
 
 @app.route('/set-selection', methods=['POST'])
 def set_selection():
@@ -51,6 +60,41 @@ def get_translation():
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
+    
+@app.route('/save-word', methods=['POST'])
+def save_word():
+    try:
+        # Parse the JSON payload from the request
+        data = request.get_json()
+
+        # Validate the payload
+        word = data.get('word')
+
+        if not word:
+            return jsonify({"error": "Word is required"}), 400
+
+        # Generate a unique ID for the item
+        item_id = str(uuid.uuid4())
+
+        # Define the item to write
+        item = {
+            'id': item_id,  # Unique identifier
+            'Word': word,
+            'owner': "44787dfc-5061-7021-96cf-4459d2d5bcd8::44787dfc-5061-7021-96cf-4459d2d5bcd8",
+            'createdAt': iso_string,
+            'updatedAt': iso_string,
+            '__typename': "Word"
+        }
+
+        # Write the item to the table
+        word_table = dynamodb.Table("Word-5nb4pqg34jhg7coztb6ku6q7fu-NONE")   
+        response = word_table.put_item(Item=item)
+        return jsonify({"message": "Word saved successfully", "item": item}), 201
+
+    except BotoCoreError as e:
+        return jsonify({"error": "Error writing to DynamoDB", "details": str(e)}), 500
+    except NoCredentialsError:
+        return jsonify({"error": "AWS credentials not found"}), 500
 
     
 # Define the run_app function here

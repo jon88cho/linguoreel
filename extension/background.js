@@ -79,5 +79,30 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     
         return true; // Indicate asynchronous response
     }
-    
+    if (request.message === "save") {
+        console.log("Saving word: ", request.word);
+
+        fetch("http://localhost:5001/save-word", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                word: request.word
+            })
+        })
+            .then(response => {
+                if (!response.ok) throw new Error("Server not reachable");
+                return response.json();
+            })
+            .then(data => {
+                console.log("Server Response:", data);
+                sendResponse({ success: true, data });
+            })
+            .catch(error => {
+                console.error("Error saving word:", error);
+                sendResponse({ success: false, error: error.message });
+            });
+
+        // Returning true to indicate we will respond asynchronously
+        return true;
+    }
 });
